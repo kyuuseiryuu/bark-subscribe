@@ -51,11 +51,11 @@ indexRouter.get('/', (req, res) => {
 indexRouter.get('/:eId/:content', async (req, res) => {
   const { eId, content } = req.params;
   const subscribers: any[] = await subscribeService.getClients(eId);
-  subscribers.map(({barkId, barkServer, ext = {}}) => {
+  subscribers.map(({barkId, barkServer, ext = '{}'}) => {
     const bark = new Bark(barkServer, barkId);
     bark.notify(content, {
       ...req.query as any,
-      ...ext as any,
+      ...(tryToParseJson(ext)) as any,
     });
   });
   res.json({ notified: subscribers.length });
@@ -67,8 +67,8 @@ indexRouter.get('/:eId/:title/:content', async (req, res) => {
     const bark = new Bark(barkServer, barkId);
     bark.notify(content, {
       title,
-      ...req.query,
-      ...(tryToParseJson(ext)),
+      ...req.query as any,
+      ...(tryToParseJson(ext)) as any,
     });
   });
   res.json({ notified: subscribers.length });

@@ -4,13 +4,7 @@ services:
     container_name: bark_subscribe
     build: .
     environment:
-      MONGODB: mongodb://mongo/bark-subscribe
       DOMAIN:
       BARK_SERVER:
     ports:
       - 3000:3000
-
-networks:
-  default:
-    external:
-      name: apps

@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "npx rimraf dist out bin",
     "build:bin": "npx pkg -t node14-linux -o bin/index out/index.js",
-    "build:onefile": "npx @vercel/ncc build out/index.js --out dist/",
+    "build:onefile": "npx @vercel/ncc build out/index.js --out dist",
     "build:ts": "npx --package=typescript tsc -p .",
     "dev": "NODE_ENV=development npx nodemon --exec ~/.config/yarn/global/node_modules/.bin/ts-node src/index.ts",
     "build:docker": "yarn clean&& yarn build:ts && yarn build:onefile && docker build -t kyuuseiryuu/bark_subscribe ."
