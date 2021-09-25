@@ -9,7 +9,7 @@
     "build:onefile": "npx @vercel/ncc build out/index.js --out dist/",
     "build:ts": "npx --package=typescript tsc -p .",
     "dev": "NODE_ENV=development npx nodemon --exec ~/.config/yarn/global/node_modules/.bin/ts-node src/index.ts",
-    "build:docker": "yarn clean&& yarn build:ts && yarn build:onefile && docker build -t ksr/barksubs ."
+    "build:docker": "yarn clean&& yarn build:ts && yarn build:onefile && docker build -t kyuuseiryuu/bark_subscribe ."
   },
   "dependencies": {
     "axios": "^0.21.4",
