@@ -1,0 +1,30 @@
+{
+  "name": "bark-subscribe",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "clean": "npx rimraf dist out bin",
+    "build:bin": "npx pkg -t node14-linux -o bin/index out/index.js",
+    "build:onefile": "npx @vercel/ncc build out/index.js --out dist/",
+    "build:ts": "npx --package=typescript tsc -p .",
+    "dev": "NODE_ENV=development npx nodemon --exec ~/.config/yarn/global/node_modules/.bin/ts-node src/index.ts",
+    "build:docker": "yarn clean&& yarn build:ts && yarn build:onefile && docker build -t ksr/barksubs ."
+  },
+  "dependencies": {
+    "axios": "^0.21.4",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.7",
+    "sqlite": "^4.0.23",
+    "sqlite3": "^5.0.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/express": "^4.17.13",
+    "@types/mongoose": "^5.11.97",
+    "@types/sqlite3": "^3.1.7",
+    "@types/winston": "^2.4.4"
+  }
+}

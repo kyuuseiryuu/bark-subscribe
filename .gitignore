@@ -1,0 +1,7 @@
+.idea
+dist
+out
+node_modules
+yarn.lock
+bin
+docker-compose.yml
