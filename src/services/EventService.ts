@@ -1,23 +1,34 @@
-import SubscribeEventModel from "../models/SubscribeEvent";
+import EventModel from "../entity/EventModel";
+import {Op} from "sequelize";
+import {Types} from 'mongoose';
 
 export default class EventService {
-  constructor(private model: typeof SubscribeEventModel) {}
   public async list(ids?: string[]) {
-    if (ids) {
-      console.log(ids, await this.model.find({
-        _id: { $in: ids },
-      }));
-      return this.model.find({
-        _id: { $in: ids },
-      });
+    if (!ids) {
+      return await EventModel.findAll({ order: [['createdAt', 'desc']] });
     }
-    return this.model.find({});
+    return await EventModel.findAll({
+      where: {
+        id: {
+          [Op.in]: ids,
+        }
+      },
+      order: [['createdAt', 'desc']],
+    });
   }
   public async create(name: string, remark?: string) {
-    return this.model.findOneAndUpdate({
+    const o = await EventModel.findOne({ where: { name }});
+    if (o) {
+      o.set('remark', remark);
+      await o.save();
+      return o;
+    }
+    return await EventModel.create({
+      id: (new Types.ObjectId().toString()),
       name,
-    },{ name, remark }, { upsert: true, new: true });
+      remark,
+    });
   }
 }
 
-export const eventService = new EventService(SubscribeEventModel);
+export const eventService = new EventService();

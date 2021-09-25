@@ -1,24 +1,18 @@
 import { connect } from 'mongoose';
 import {config} from "./config";
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
 import * as path from "path";
+import {Sequelize} from "sequelize";
+import winston from 'winston';
 
-// you would have to import / invoke this in another file
-
-export async function openDb () {
-  return open({
-    filename: path.resolve(__dirname, '../data/database.db'),
-    driver: sqlite3.Database
-  });
-}
-// export async function initTables() {
-//   const db = await openDb();
-//   const result = db.exec(`
-//   CREATE TABLE IF NOT EXISTS
-//   `);
-// }
-export async function connectMongo() {
-  return connect(config.MONGODB, {
-  });
-}
+export const logger = winston.createLogger({
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.json(),
+    }),
+  ],
+  format: winston.format.json()
+});
+export const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: path.join(__dirname, 'database', 'database.db'),
+});

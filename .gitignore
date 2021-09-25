@@ -5,3 +5,10 @@ node_modules
 yarn.lock
 bin
 docker-compose.yml
+package-lock.json
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
+database/

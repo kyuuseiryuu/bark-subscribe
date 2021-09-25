@@ -1,13 +1,10 @@
 import express, {Router} from 'express';
 import {config} from "./config";
-import {connectMongo} from "./utils";
 import {Bark} from "./bark";
 import * as bodyParser from "body-parser";
-import ClientSubscribeModel from "./models/ClientSubscribes";
-import {ClientService} from "./services/ClientService";
 import eventRouter from "./routers/event.router";
-
-const clientService = new ClientService(ClientSubscribeModel);
+import tryToParseJson from "./tryToParseJson";
+import {subscribeService} from "./services/SubscribeService";
 
 const indexRouter = Router();
 
@@ -53,25 +50,25 @@ indexRouter.get('/', (req, res) => {
 })
 indexRouter.get('/:eId/:content', async (req, res) => {
   const { eId, content } = req.params;
-  const subscribers = await clientService.getClients(eId);
-  subscribers.map(s => {
-    const bark = new Bark(s.barkServer, s.barkId);
+  const subscribers: any[] = await subscribeService.getClients(eId);
+  subscribers.map(({barkId, barkServer, ext = {}}) => {
+    const bark = new Bark(barkServer, barkId);
     bark.notify(content, {
       ...req.query as any,
-      ...s?.ext as any,
+      ...ext as any,
     });
   });
   res.json({ notified: subscribers.length });
 });
 indexRouter.get('/:eId/:title/:content', async (req, res) => {
   const { eId, title, content } = req.params;
-  const subscribers = await clientService.getClients(eId);
-  subscribers.map(s => {
-    const bark = new Bark(s.barkServer, s.barkId);
+  const subscribers: any[] = await subscribeService.getClients(eId);
+  subscribers.map(({barkId, barkServer, ext = "{}"}) => {
+    const bark = new Bark(barkServer, barkId);
     bark.notify(content, {
       title,
       ...req.query,
-      ...s?.ext,
+      ...(tryToParseJson(ext)),
     });
   });
   res.json({ notified: subscribers.length });
@@ -79,7 +76,6 @@ indexRouter.get('/:eId/:title/:content', async (req, res) => {
 
 
 async function main() {
-  await connectMongo();
   const app = express();
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded());
