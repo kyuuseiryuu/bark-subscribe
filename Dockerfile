@@ -1,4 +1,6 @@
 FROM node
 WORKDIR /app
-COPY ./dist /app
-ENTRYPOINT ["/usr/local/bin/node", "/app/index.js"]
+COPY /dist /app
+COPY package.json /app
+RUN npm install
+CMD node index.js
