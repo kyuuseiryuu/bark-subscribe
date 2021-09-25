@@ -1,5 +1,3 @@
-import { connect } from 'mongoose';
-import {config} from "./config";
 import * as path from "path";
 import {Sequelize} from "sequelize";
 import winston from 'winston';
