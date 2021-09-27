@@ -9,6 +9,7 @@ export interface BarkMessageConfig {
   url: string;
   autoCopy: 1 | 0;
   sound: string;
+  icon: string;
 }
 
 export class Bark {
