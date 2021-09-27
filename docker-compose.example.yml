@@ -1,8 +1,10 @@
 version: "3.0"
 services:
   bark-subscribe:
+    image: kyuuseiryuu/bark_subscribe
     container_name: bark_subscribe
-    build: .
+    volumes:
+      - ./:/app/database
     environment:
       DOMAIN:
       BARK_SERVER:
